@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@babylonjs/loaders"></script>
+    <!-- Inclusion de Babylon.js -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <!-- Inclusion de Babylon.js loader (GLTF) -->
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
+    <canvas id="renderCanvas" style="width: 100%; height: 100%;"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
