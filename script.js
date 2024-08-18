@@ -8,8 +8,8 @@ window.addEventListener('DOMContentLoaded', function() {
     const scene = new BABYLON.Scene(engine);
 
     // Configuration de l'image
-    scene.imageProcessingConfiguration.contrast = 1.15; // Ajustement du contraste
-    scene.imageProcessingConfiguration.exposure = 1.5; // Ajustement de l'exposition
+    scene.imageProcessingConfiguration.contrast = 1.15;
+    scene.imageProcessingConfiguration.exposure = 1.5;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
     scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_REINHARD;
 
@@ -19,15 +19,20 @@ window.addEventListener('DOMContentLoaded', function() {
     skySphereMaterial.backFaceCulling = false;
 
     // Charger la texture panoramique et l'inverser verticalement
-    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, false, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE);
-    texture.vScale = -1; // Inverser la texture verticalement pour corriger l'orientation
+    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, false, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE, function() {
+        console.log("Texture chargée avec succès !");
+        skySphereMaterial.diffuseTexture = texture;
+    }, function(message) {
+        console.error("Erreur lors du chargement de la texture :", message);
+    });
+
+    texture.vScale = -1; // Inverser la texture verticalement
 
     skySphereMaterial.diffuseTexture = texture;
     skySphereMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
     skySphereMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
     skySphere.material = skySphereMaterial;
 
-    // Inverse la normale pour que la texture soit visible de l'intérieur de la sphère
     skySphere.scaling.x = -1;
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
