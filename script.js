@@ -1,34 +1,32 @@
-// script.js
+window.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    document.body.appendChild(canvas);
 
-// Création de la scène Babylon.js
-var canvas = document.getElementById("renderCanvas");
-var engine = new BABYLON.Engine(canvas, true);
+    const engine = new BABYLON.Engine(canvas, true);
+    const scene = new BABYLON.Scene(engine);
 
-var createScene = function () {
-    var scene = new BABYLON.Scene(engine);
-
-    // Ajout d'une caméra et de la lumière
-    var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 4, 4, BABYLON.Vector3.Zero(), scene);
+    const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
 
-    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     light.intensity = 0.7;
 
-    // Chargement du modèle GLTF
-    BABYLON.SceneLoader.Append("assets/scene.gltf", "", scene, function (scene) {
+    // Vérifier si l'URL du modèle fonctionne
+    console.log("Chargement du modèle 3D...");
+
+    BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene, function () {
         console.log("Modèle chargé avec succès !");
-    }, null, function(scene, message) {
+    }, function (scene, message) {
         console.error("Erreur lors du chargement du modèle:", message);
     });
 
-    return scene;
-};
+    engine.runRenderLoop(function() {
+        scene.render();
+    });
 
-var scene = createScene();
-engine.runRenderLoop(function () {
-    scene.render();
-});
-
-window.addEventListener("resize", function () {
-    engine.resize();
+    window.addEventListener('resize', function() {
+        engine.resize();
+    });
 });
