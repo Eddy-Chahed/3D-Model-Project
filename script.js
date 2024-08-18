@@ -1,4 +1,4 @@
-let scene, camera, renderer, controls, skybox, smartphone;
+let scene, camera, renderer, controls, smartphone;
 
 function init() {
     // Création de la scène
@@ -11,40 +11,20 @@ function init() {
     // Configuration du rendu
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.5; // Ajuste l'exposition pour plus de luminosité
     document.body.appendChild(renderer.domElement);
 
     // Lumière ambiante
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5); // Éclaire la scène uniformément
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Lumière pour éclairer la scène
     scene.add(ambientLight);
-
-    // Charger et configurer l'image de fond (skybox)
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('assets/pretville_street_4k-3928055.webp', function(texture) {
-        texture.encoding = THREE.sRGBEncoding;
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-
-        const geometry = new THREE.SphereGeometry(500, 60, 40);
-        geometry.scale(-1, 1, 1); // Inverser la géométrie pour que l'intérieur soit visible
-        const material = new THREE.MeshBasicMaterial({ map: texture });
-        material.color.setHSL(0, 0.3, 1.3); // Augmente la saturation et la luminosité
-        skybox = new THREE.Mesh(geometry, material);
-        scene.add(skybox);
-
-        animate();
-    });
 
     // Charger le modèle 3D du smartphone
     const gltfLoader = new THREE.GLTFLoader();
-    gltfLoader.load('smartphone.glb', function(gltf) {
+    gltfLoader.load('https://github.com/Eddy-Chahed/3D-Model-Project/raw/main/smartphone.glb', function(gltf) {
         smartphone = gltf.scene;
         smartphone.position.set(0, 0, 0);  // Positionne le modèle au centre de la scène
         smartphone.scale.set(0.5, 0.5, 0.5);  // Ajuste l'échelle si nécessaire
         scene.add(smartphone);
+        animate();
     }, undefined, function(error) {
         console.error('Erreur lors du chargement du modèle:', error);
     });
@@ -66,14 +46,8 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Faire tourner l'image de fond
-    if (skybox) {
-        skybox.rotation.y += 0.001; // Rotation lente pour un effet immersif
-    }
-
-    // Faire tourner le smartphone
     if (smartphone) {
-        smartphone.rotation.y += 0.01;
+        smartphone.rotation.y += 0.01;  // Rotation du modèle pour le voir sous tous les angles
     }
 
     controls.update();
