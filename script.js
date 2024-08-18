@@ -7,9 +7,6 @@ window.addEventListener('DOMContentLoaded', function() {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
 
-    // Ajout de messages de débogage
-    console.log("Initialisation de la scène...");
-
     // Créer une sphère pour l'image panoramique
     const skySphere = BABYLON.MeshBuilder.CreateSphere("skySphere", {segments: 32, diameter: 1000}, scene);
     const skySphereMaterial = new BABYLON.StandardMaterial("skySphereMaterial", scene);
@@ -23,14 +20,17 @@ window.addEventListener('DOMContentLoaded', function() {
         console.error("Erreur lors du chargement de la texture :", message);
     });
 
-    // Appliquer la texture à la skySphere
+    // Appliquer la texture à la skySphere avec l'orientation corrigée
     skySphereMaterial.diffuseTexture = texture;
     skySphereMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
     skySphereMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
     skySphere.material = skySphereMaterial;
+
+    // Inverse la normale pour que la texture soit visible de l'intérieur de la sphère
     skySphere.scaling.x = -1;
 
-    console.log("SkySphere créée.");
+    // Corriger l'orientation de la texture en inversant autour de l'axe Y
+    skySphere.rotation.x = Math.PI;
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
