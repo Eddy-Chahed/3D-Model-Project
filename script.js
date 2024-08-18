@@ -18,22 +18,17 @@ window.addEventListener('DOMContentLoaded', function() {
     const skySphereMaterial = new BABYLON.StandardMaterial("skySphereMaterial", scene);
     skySphereMaterial.backFaceCulling = false;
 
-    // Charger la texture panoramique et l'inverser verticalement
-    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, false, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE, function() {
+    // Charger la texture panoramique
+    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, true, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE, function() {
         console.log("Texture chargée avec succès !");
         skySphereMaterial.diffuseTexture = texture;
+        skySphereMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
+        skySphereMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+        skySphere.material = skySphereMaterial;
+        skySphere.scaling.x = -1;
     }, function(message) {
         console.error("Erreur lors du chargement de la texture :", message);
     });
-
-    texture.vScale = -1; // Inverser la texture verticalement
-
-    skySphereMaterial.diffuseTexture = texture;
-    skySphereMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
-    skySphereMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
-    skySphere.material = skySphereMaterial;
-
-    skySphere.scaling.x = -1;
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
