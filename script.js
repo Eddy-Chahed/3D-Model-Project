@@ -8,11 +8,13 @@ window.addEventListener('DOMContentLoaded', function() {
     const scene = new BABYLON.Scene(engine);
 
     // Configuration du rendu pour améliorer les couleurs et la luminosité
-    scene.imageProcessingConfiguration.contrast = 1.15;
-    scene.imageProcessingConfiguration.exposure = 1.5;
+    scene.imageProcessingConfiguration.contrast = 1.15; // Ajustement du contraste
+    scene.imageProcessingConfiguration.exposure = 1.5; // Ajustement de l'exposition
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
     scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_REINHARD;
-    scene.imageProcessingConfiguration.vignetteWeight = 1.9;
+
+    // Réduction de la saturation et de l'ombre
+    scene.imageProcessingConfiguration.vignetteWeight = 0.5;
 
     // Créer une sphère pour l'image panoramique
     const skySphere = BABYLON.MeshBuilder.CreateSphere("skySphere", {segments: 32, diameter: 1000}, scene);
@@ -20,13 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
     skySphereMaterial.backFaceCulling = false;
 
     // Charger la texture panoramique et l'inverser verticalement
-    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, false, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE, function() {
-        console.log("Texture chargée avec succès !");
-        skySphereMaterial.diffuseTexture = texture;
-    }, function(message) {
-        console.error("Erreur lors du chargement de la texture :", message);
-    });
-
+    const texture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene, false, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE);
     texture.vScale = -1; // Inverser la texture verticalement
 
     skySphereMaterial.diffuseTexture = texture;
@@ -40,24 +36,18 @@ window.addEventListener('DOMContentLoaded', function() {
     camera.attachControl(canvas, true);
 
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-    light.intensity = 0.7;
+    light.intensity = 1.25; // Ajuster l'intensité lumineuse
 
     // Charger le modèle GLB
-    console.log("Chargement du modèle 3D...");
-    BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene, function () {
-        console.log("Modèle chargé avec succès !");
-    }, function (scene, message) {
-        console.error("Erreur lors du chargement du modèle :", message);
-    });
+    BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene);
 
+    // Rotation de la skySphere dans le sens des aiguilles d'une montre
     engine.runRenderLoop(function() {
-        skySphere.rotation.y += 0.001;
+        skySphere.rotation.y -= 0.001; // Rotation dans le sens des aiguilles d'une montre
         scene.render();
     });
 
     window.addEventListener('resize', function() {
         engine.resize();
     });
-
-    console.log("Scène initialisée.");
 });
