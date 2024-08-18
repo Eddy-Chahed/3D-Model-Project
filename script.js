@@ -7,6 +7,13 @@ window.addEventListener('DOMContentLoaded', function() {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
 
+    // Configuration du rendu pour améliorer les couleurs et la luminosité
+    scene.imageProcessingConfiguration.contrast = 1.15; // Augmentation du contraste
+    scene.imageProcessingConfiguration.exposure = 1.5; // Augmentation de l'exposition pour plus de luminosité
+    scene.imageProcessingConfiguration.toneMappingEnabled = true;
+    scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_REINHARD;
+    scene.imageProcessingConfiguration.vignetteWeight = 1.9; // Simule une légère augmentation de la luminosité dans les zones sombres
+
     // Créer une sphère pour l'image panoramique
     const skySphere = BABYLON.MeshBuilder.CreateSphere("skySphere", {segments: 32, diameter: 1000}, scene);
     const skySphereMaterial = new BABYLON.StandardMaterial("skySphereMaterial", scene);
@@ -29,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Inverse la normale pour que la texture soit visible de l'intérieur de la sphère
     skySphere.scaling.x = -1;
 
-    // Corriger l'orientation de la texture en inversant autour de l'axe Y
+    // Corriger l'orientation de la texture en inversant autour de l'axe X
     skySphere.rotation.x = Math.PI;
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
