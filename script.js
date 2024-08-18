@@ -7,16 +7,15 @@ window.addEventListener('DOMContentLoaded', function() {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
 
-    // Ajout de l'image panoramique comme fond
-    const backgroundMaterial = new BABYLON.StandardMaterial("backgroundMaterial", scene);
-    backgroundMaterial.diffuseTexture = new BABYLON.Texture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene);
-    backgroundMaterial.diffuseTexture.uScale = -1; // Ajuste le sens horizontal si nécessaire
-    backgroundMaterial.diffuseTexture.vScale = 1;  // Ajuste le sens vertical si nécessaire
-
-    // Créer un plan pour appliquer l'image panoramique
-    const backgroundPlane = BABYLON.MeshBuilder.CreatePlane("backgroundPlane", {width: 1000, height: 500}, scene);
-    backgroundPlane.material = backgroundMaterial;
-    backgroundPlane.position.z = -10; // Positionner derrière le modèle 3D
+    // Créer une skybox pour l'arrière-plan
+    const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
+    const skyboxMaterial = new BABYLON.StandardMaterial("skyBoxMaterial", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene);
+    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
@@ -33,9 +32,9 @@ window.addEventListener('DOMContentLoaded', function() {
         console.error("Erreur lors du chargement du modèle:", message);
     });
 
-    // Fonction de rotation du plan en arrière-plan
+    // Rotation de la skybox pour simuler un arrière-plan en rotation
     engine.runRenderLoop(function() {
-        backgroundPlane.rotation.y += 0.001; // Vitesse de rotation ajustable
+        skybox.rotation.y += 0.001; // Ajustez cette valeur pour modifier la vitesse de rotation
         scene.render();
     });
 
