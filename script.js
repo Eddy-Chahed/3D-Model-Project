@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', function() {
         console.error("Erreur lors du chargement de la texture :", message);
     });
 
-    // Appliquer la texture à la skySphere avec l'orientation corrigée
+    // Appliquer la texture à la skySphere
     skySphereMaterial.diffuseTexture = texture;
     skySphereMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
     skySphereMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
@@ -36,8 +36,8 @@ window.addEventListener('DOMContentLoaded', function() {
     // Inverse la normale pour que la texture soit visible de l'intérieur de la sphère
     skySphere.scaling.x = -1;
 
-    // Corriger l'orientation de la texture en inversant autour de l'axe X
-    skySphere.rotation.x = Math.PI;
+    // Suppression de la ligne d'inversion
+    // skySphere.rotation.x = Math.PI; // Ligne supprimée pour ne pas inverser l'image
 
     const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
     camera.attachControl(canvas, true);
