@@ -7,11 +7,13 @@ window.addEventListener('DOMContentLoaded', function() {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
 
-    // Créer une skybox pour l'arrière-plan
+    // Créer une skybox standard pour tester
     const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
     const skyboxMaterial = new BABYLON.StandardMaterial("skyBoxMaterial", scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://content.app-sources.com/s/575462982018629301/uploads/Animation/pretville_street_4k-3928055.webp", scene);
+
+    // Utiliser une skybox standard (six images pour chaque face du cube)
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("https://www.babylonjs.com/assets/skybox", scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
@@ -23,9 +25,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     light.intensity = 0.7;
 
-    // Vérifier si l'URL du modèle fonctionne
-    console.log("Chargement du modèle 3D...");
-
+    // Charger le modèle GLB
     BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene, function () {
         console.log("Modèle chargé avec succès !");
     }, function (scene, message) {
