@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer with Babylon.js</title>
-    <link rel="stylesheet" href="style.css"> <!-- Lien vers le fichier CSS externe -->
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { width: 100%; height: 100%; display: block; }
+    </style>
 </head>
 <body>
+    <!-- Inclusion de Babylon.js -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <!-- Inclusion du plugin GLTF/GLB loader -->
     <script src="https://cdn.babylonjs.com/loaders/babylon.glTF2FileLoader.min.js"></script>
     <script src="script.js"></script>
 </body>
