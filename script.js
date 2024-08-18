@@ -13,10 +13,10 @@ window.addEventListener('DOMContentLoaded', function() {
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     light.intensity = 0.7;
 
-    // Utilisation de l'URL GitHub Pages pour charger le modèle 3D
+    // Vérifier si l'URL du modèle fonctionne
     console.log("Chargement du modèle 3D...");
 
-    BABYLON.SceneLoader.Append("", "https://eddy-chahed.github.io/3D-Model-Project/smartphone.glb", scene, function () {
+    BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene, function () {
         console.log("Modèle chargé avec succès !");
     }, function (scene, message) {
         console.error("Erreur lors du chargement du modèle:", message);
