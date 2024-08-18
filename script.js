@@ -11,15 +11,16 @@ function init() {
     // Configuration du rendu
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
     document.body.appendChild(renderer.domElement);
 
     // Lumière ambiante
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Lumière pour éclairer la scène
     scene.add(ambientLight);
 
-    // Charger le modèle 3D du smartphone
+    // Charger le modèle 3D du smartphone depuis le serveur Simvoly
     const gltfLoader = new THREE.GLTFLoader();
-    gltfLoader.load('https://github.com/Eddy-Chahed/3D-Model-Project/raw/main/smartphone.glb', function(gltf) {
+    gltfLoader.load('https://content.app-sources.com/s/575462982018629301/uploads/Animation/smartphone-3990373.glb', function(gltf) {
         smartphone = gltf.scene;
         smartphone.position.set(0, 0, 0);  // Positionne le modèle au centre de la scène
         smartphone.scale.set(0.5, 0.5, 0.5);  // Ajuste l'échelle si nécessaire
