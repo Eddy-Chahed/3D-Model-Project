@@ -1,58 +1,36 @@
-let scene, camera, renderer, controls, smartphone;
+window.addEventListener('DOMContentLoaded', function() {
+    // Création de la scène Babylon.js
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    document.body.appendChild(canvas);
 
-function init() {
-    // Création de la scène
-    scene = new THREE.Scene();
+    const engine = new BABYLON.Engine(canvas, true);
+    const scene = new BABYLON.Scene(engine);
 
-    // Configuration de la caméra
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1, 5);
+    // Création de la caméra
+    const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
+    camera.attachControl(canvas, true);
 
-    // Configuration du rendu
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    document.body.appendChild(renderer.domElement);
+    // Lumière hémisphérique
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+    light.intensity = 0.7;
 
-    // Lumière ambiante
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Lumière pour éclairer la scène
-    scene.add(ambientLight);
-
-    // Charger le modèle 3D du smartphone depuis le serveur Simvoly
-    const gltfLoader = new THREE.GLTFLoader();
-    gltfLoader.load('https://content.app-sources.com/s/575462982018629301/uploads/Animation/smartphone-3990373.glb', function(gltf) {
-        smartphone = gltf.scene;
-        smartphone.position.set(0, 0, 0);  // Positionne le modèle au centre de la scène
-        smartphone.scale.set(0.5, 0.5, 0.5);  // Ajuste l'échelle si nécessaire
-        scene.add(smartphone);
-        animate();
-    }, undefined, function(error) {
-        console.error('Erreur lors du chargement du modèle:', error);
+    // Charger le modèle .glb depuis le serveur Simvoly
+    BABYLON.SceneLoader.Append("", "https://content.app-sources.com/s/575462982018629301/uploads/Animation/smartphone-3990373.glb", scene, function (scene) {
+        // Modèle chargé avec succès
+        console.log("Modèle chargé avec succès.");
+    }, function (scene, message) {
+        console.error("Erreur lors du chargement du modèle:", message);
     });
 
-    // Configurer les contrôles de la caméra
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.enableZoom = true;
-
-    // Redimensionner la fenêtre
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+    // Boucle de rendu
+    engine.runRenderLoop(function() {
+        scene.render();
     });
-}
 
-function animate() {
-    requestAnimationFrame(animate);
-
-    if (smartphone) {
-        smartphone.rotation.y += 0.01;  // Rotation du modèle pour le voir sous tous les angles
-    }
-
-    controls.update();
-    renderer.render(scene, camera);
-}
-
-init();
+    // Adapter la scène lors du redimensionnement
+    window.addEventListener('resize', function() {
+        engine.resize();
+    });
+});
