@@ -7,13 +7,13 @@ window.addEventListener('DOMContentLoaded', function() {
     const engine = new BABYLON.Engine(canvas, true);
     const scene = new BABYLON.Scene(engine);
 
-    // Configuration de l'image
-    scene.imageProcessingConfiguration.contrast = 1.15;
-    scene.imageProcessingConfiguration.exposure = 1.5;
-    scene.imageProcessingConfiguration.toneMappingEnabled = true;
-    scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_REINHARD;
+    const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
+    camera.attachControl(canvas, true);
 
-    // Créer une sphère pour l'image panoramique
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+    light.intensity = 0.7;
+
+    // Charger l'image panoramique en tant que fond
     const skySphere = BABYLON.MeshBuilder.CreateSphere("skySphere", {segments: 32, diameter: 1000}, scene);
     const skySphereMaterial = new BABYLON.StandardMaterial("skySphereMaterial", scene);
     skySphereMaterial.backFaceCulling = false;
@@ -30,13 +30,7 @@ window.addEventListener('DOMContentLoaded', function() {
         console.error("Erreur lors du chargement de la texture :", message);
     });
 
-    const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
-    camera.attachControl(canvas, true);
-
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-    light.intensity = 0.7;
-
-    // Charger le modèle GLB
+    // Charger le modèle 3D
     console.log("Chargement du modèle 3D...");
     BABYLON.SceneLoader.Append("https://eddy-chahed.github.io/3D-Model-Project/", "smartphone.glb", scene, function () {
         console.log("Modèle chargé avec succès !");
@@ -53,6 +47,4 @@ window.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         engine.resize();
     });
-
-    console.log("Scène initialisée.");
 });
